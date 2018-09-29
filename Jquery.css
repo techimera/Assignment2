@@ -1,0 +1,109 @@
+#APIcontainer{
+    width: 100%;
+    height: 1000px;
+}
+
+#weatherAPI {
+    float: left;
+    height: 100%;
+    width: 20%;
+    color: white;
+    margin: 10px;
+    background-image: url("https://i.ytimg.com/vi/uyQEXuMqkG4/maxresdefault.jpg");
+    border-radius: 25px;
+}
+
+#searchAPI{
+    width: 75%;
+    float: left;
+    margin: 10px;
+    border-radius: 25px;
+}
+
+#stack{
+    border-radius: 25px;
+    background-color: white;
+    position: relative;
+}
+
+#searchingarea{
+    height: 800px;
+    margin-top: 25px;
+    border-radius: 25px;
+    background-image: url("https://i.ytimg.com/vi/xwQ5YpcCDHk/maxresdefault.jpg");
+}
+
+
+#searchbox{
+    color: orange;
+    padding: 20px;
+    position: relative;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    border: 2px;
+    border-style:solid;
+    border-width: 2px;
+    border-color: gray;
+    border-radius: 15px;
+    background-color: white;
+    width: 50%;
+}
+
+#result{
+    border: 1px;
+    border-style: solid;
+    border-color: orange;
+    padding: 3px;
+    border-width: 1px;
+    border-radius: 6px;
+    background-color:white;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    width: 80%;
+    list-style-type: none;
+}
+
+a{
+    color: orange;
+}
+a:visited{
+    color: gray;
+}
+
+#searched{
+    margin-top: 50px;
+}
+
+#html{
+    background: url("https://images.unsplash.com/photo-1530482817083-29ae4b92ff15?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=44f4aebbd1e1371d5bf7dc22016c5d29&w=1000&q=80") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+h1{
+    padding: 25px;
+    font-size: 40px;
+    float:left;
+}
+
+#weathericon{
+    position: relative;
+    top: 45px;
+    left: 20px;
+}
+
+#weatherform{
+    position:fixed;
+    top: 20%;
+    left: 30px;
+    text-align: center;
+}
+
+#weatherlist{
+    padding: 0;
+    list-style-type: none;
+}

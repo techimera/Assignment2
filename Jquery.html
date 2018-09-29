@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html id="html">
+    <head>
+    
+    <link  rel="stylesheet" type="text/css" href="Jquery.css">
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    </head>
+    
+    <body>
+      <div id="APIcontainer">
+      <!--div for searching weather-->
+      <div id = "weatherAPI"> 
+        <!--the format for the city search-->
+        <div id ="upside">
+        <h1> Weather </h1>
+          <div  id="weathericon">
+          <img src = "http://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/weather-icon.png" width="20%">
+          </div>
+        </div>
+        
+        <div id="weatherform">
+        <form>
+        Enter A Utah City:<input type="text" id="cityField" value=""></br>
+        Suggestion: <span id="txtHint"></span>
+        <input id="weatherButton" type="submit" value="Submit">
+        </form>
+        <p>City</p>
+        <textarea id="displayCity">No City</textarea>
+        
+        <!--the format for the weather-->
+        <p>Current Weather</p>
+        <div id="weather">No weather</div>
+        </div>
+      </div>
+      
+      <!--div for searching in stakcoverFlow-->
+      <div id= "searchAPI">
+        <div id= "stack">
+          <a herf = "https://stackoverflow.com/">
+            <img src = "http://www.ranklogos.com/wp-content/uploads/2015/06/Stack-Overflow-Logo.png" width = "50%">
+            </a>
+        </div>
+        <div id = "searchingarea">
+          <form id = "searchbox">
+          Search: <input type="text" id="StackSearchBox" value="">
+          <input id="searchbutton" type="submit" value="Search">
+          </form>
+          <div id="searchResult"></div>
+        </div>
+      </div>
+        
+      <script>
+      // basic keup function - when its written, it pops alert
+      // $(document).ready(function() {
+      //   $( "#cityField" ).keyup(function() {
+      //     alert( "Handler for .keyup() called." );
+      //   });
+      // });
+      
+      // change the texts
+      // $( "#cityField" ).keyup(function() {
+      //   $("#txtHint").text("Keyup");
+      // });
+      
+      // $( "#cityField" ).keyup(function() {
+      //   $("#txtHint").text("Keyup "+$("#cityField").val());
+      // });
+            
+            
+      $(document).ready(function() {
+        $( "#cityField" ).keyup(function() {
+          var url = "http://bioresearch.byu.edu/cs260/jquery/getcity.cgi?q="+$("#cityField").val();
+          $.getJSON(url,function(data) {
+            var everything;
+            everything = "<ul id='weatherlist'>";
+            $.each(data, function(i,item) {
+              everything += "<li> "+data[i].city;
+            });
+            everything += "</ul>";
+            $("#txtHint").html(everything);
+          })
+          .done(function() { console.log('getJSON request succeeded!'); })
+          .fail(function(jqXHR, textStatus, errorThrown) { 
+            console.log('getJSON request failed! ' + textStatus); 
+            console.log("incoming "+jqXHR.responseText);
+          })
+          .always(function() { console.log('getJSON request ended!');
+          });
+        });
+      });
+      
+      $("#weatherButton").click(function(e){
+        var value = $("#cityField").val();
+        console.log(value);
+        e.preventDefault();
+        
+        //showing the input in the text box
+         $("#displayCity").text(value);
+         
+        //search for the result and return it
+        var myurl= "https://api.openweathermap.org/data/2.5/weather?units=imperial&appid=89e8dca515a4b52d710830cc0ba931ff&q=";
+        myurl += value;
+        console.log(myurl);
+        $.ajax({
+          url : myurl,
+          dataType : "json",
+              success : function(parsed_json) {
+                  var location = parsed_json['name'];
+                  var weather = parsed_json['weather'][0]['main'];
+                  var temp = parsed_json['main']['temp'];
+                  var temp2 = (temp - 32) * 5 / 9;
+                  temp = Math.round(temp*100)/100
+                  temp2 = Math.round(temp2*100)/100
+                  //var weather_icon = parsed_json['weather'][0]['icon'];
+                  //var humidity = parsed_json['main']['humidity'];
+                  // var temp_min = parsed_json['main']['temp_min'];
+                  // var temp_max = parsed_json['main']['temp_max'];
+                  // var wind_speed = parsed_json['wind']['speed'];
+                  //everything = "<img src=\"http://openweathermap.org/img/w/" + weather_icon + ".png\"/>"
+                  everything = "<ul id='weatherlist'>";
+                  everything += "<li>Location: " + location;
+                  everything += "<li>Temperature " + " (" + temp + "&#8457;)" + " (" + temp2 + "&#8451;)";
+                  everything += "<li>Weather: " + weather;// + " (" + temp + "&#8457;)";
+                  // everything += "<li>Low: " + temp_min + "&#8457; | High: " + temp_max + "&#8457;";
+                  // everything += "<li>Humidity: " + humidity + "%";
+                  // everything += "<li>Wind: " + wind_speed + " mph";
+                  // everything += "</ul>";
+                  $("#weather").html(everything);
+              }
+          });
+        });
+        
+      $("#searchbutton").click(function(e){
+        var value = $("#StackSearchBox").val();
+        console.log(value);
+        e.preventDefault();
+        
+        var StackURL = "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle=" + value + "&site=stackoverflow";
+        console.log(StackURL);
+        $.ajax({
+          url : StackURL,
+          dataType : "json",
+          success : function(data) {
+            $("#searchbox").animate({"top": "50px", "left": "300px"}, "fast");
+
+              console.log(data);
+              var taggedlinks = "<ul id='searched'>";
+              for (var i = 0; i < data.items.length; i++ ){
+                // '  or &quot; for ""
+                var link = "<li id ='result'>" + "<a href='" + data.items[i].link + "'>"+ data.items[i].title +"</a></li>";
+                taggedlinks+= link;
+              }
+              taggedlinks += "</ul>"
+              $("#searchResult").html(taggedlinks);
+              
+              var newheight = $("#searched").height();
+              if (newheight > 740){
+                $("#searchingarea").css('height', '1000px');
+              }
+              else{
+                $("#searchingarea").css('height', '800px');
+              }
+          }
+        });
+        
+        
+      });
+        
+      </script>
+    
+    </body>
+</html>
